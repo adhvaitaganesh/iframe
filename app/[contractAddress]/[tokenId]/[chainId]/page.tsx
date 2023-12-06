@@ -153,7 +153,7 @@ export default function Token({ params, searchParams }: TokenParams) {
                     />
                   ))
                 ) : (
-                  <></>
+                  <blockquote class="twitter-tweet"><p lang="zxx" dir="ltr"><a href="https://t.co/9apWNwch0V">pic.twitter.com/9apWNwch0V</a></p>&mdash; Elon Musk (@elonmusk) <a href="https://twitter.com/elonmusk/status/1732311528227909880?ref_src=twsrc%5Etfw">December 6, 2023</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
                 )}
               </div>
             )}
