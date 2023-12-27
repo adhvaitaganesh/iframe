@@ -94,6 +94,9 @@ devDependencies:
   tailwindcss:
     specifier: 3.3.2
     version: 3.3.2
+  reat-tweet:
+    specifier: ^3.0.0
+    version: 3.0.0  
 
 packages:
 
