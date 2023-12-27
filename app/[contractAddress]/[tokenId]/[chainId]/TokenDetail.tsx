@@ -40,7 +40,7 @@ type LogoType = {
 };
 
 const Logo: LogoType = {
-  DEFAULT: TokenboundLogo,
+  DEFAULT: mrkdLogo,
   GALVERSE: GalverseLogo,
 };
 
