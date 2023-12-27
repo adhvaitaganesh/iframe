@@ -122,6 +122,8 @@ export const Panel = ({
             <CopyAddress account={account} displayedAddress={displayedAddress} />
           </DropdownMenu>
           <ExternalLink className="h-[20px] w-[20px]" link={etherscanLink} />
+          <ExternalLink className="h-[20px] w-[20px]" link= "https://www.kezi-ban.com/" />
+          <ExternalLink className="h-[20px] w-[20px]" link={etherscanLink} />
         </div>
       )}
       {approvalTokensCount ? (
