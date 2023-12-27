@@ -1,5 +1,5 @@
 import { Variants, motion } from "framer-motion";
-import { GalverseLogo, TokenboundLogo } from "@/components/icon";
+import { GalverseLogo, TokenboundLogo, mrkdLogo } from "@/components/icon";
 import { Panel } from "./Panel";
 import { TbaOwnedNft } from "@/lib/types";
 
