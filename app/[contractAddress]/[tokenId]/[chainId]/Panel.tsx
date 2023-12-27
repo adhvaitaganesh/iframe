@@ -21,6 +21,7 @@ import { chainIdToOpenseaAssetUrl } from "@/lib/constants";
 export const TABS = {
   COLLECTIBLES: "Collectibles",
   ASSETS: "Assets",
+  SOCIAL: "Socials",
 };
 
 interface CopyAddressProps {
@@ -190,6 +191,14 @@ export const Panel = ({
               <div className="text-base text-[#979797]">{tokenData.balance}</div>
             </div>
           ))}
+        </div>
+      </TabPanel>
+      <TabPanel value={TABS.SOCIAL} currentTab={currentTab}>
+        <div className="flex w-full flex-col space-y-3">
+          <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Another amazing event hosted by the inspiring <a href="https://twitter.com/hashtag/NFT?src=hash&amp;ref_src=twsrc%5Etfw">#NFT</a> <a href="https://twitter.com/hashtag/web3?src=hash&amp;ref_src=twsrc%5Etfw">#web3</a> badass <a href="https://twitter.com/emmajane1313?ref_src=twsrc%5Etfw">@emmajane1313</a> from <a href="https://twitter.com/DIGITALAX_?ref_src=twsrc%5Etfw">@DIGITALAX_</a>. Thank you @lume_studios for opening up your space to so many creatives. <a href="https://t.co/6qXLJl6vzy">pic.twitter.com/6qXLJl6vzy</a></p>&mdash; KEZI BAN (@kezi__ban) <a href="https://twitter.com/kezi__ban/status/1494747522367119361?ref_src=twsrc%5Etfw">February 18, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
+        <div className="flex w-full flex-col space-y-3">
+          <blockquote class="twitter-tweet" data-media-max-width="560"><p lang="en" dir="ltr">Went to such an inspiring and 🤯🤯🤯meetup last night with the one and only <a href="https://twitter.com/emmajane1313?ref_src=twsrc%5Etfw">@emmajane1313</a> from <a href="https://twitter.com/DIGITALAX_?ref_src=twsrc%5Etfw">@DIGITALAX_</a> She is beyond knowledgeable about all things <a href="https://twitter.com/hashtag/web3?src=hash&amp;ref_src=twsrc%5Etfw">#web3</a> <a href="https://twitter.com/hashtag/nft?src=hash&amp;ref_src=twsrc%5Etfw">#nft</a> <a href="https://twitter.com/hashtag/crypto?src=hash&amp;ref_src=twsrc%5Etfw">#crypto</a> <a href="https://twitter.com/hashtag/Ethereum?src=hash&amp;ref_src=twsrc%5Etfw">#Ethereum</a> <br>Thank you for the education. I need to crawl inside your brain. <a href="https://t.co/ZGUP3sqiW6">pic.twitter.com/ZGUP3sqiW6</a></p>&mdash; KEZI BAN (@kezi__ban) <a href="https://twitter.com/kezi__ban/status/1492205338153697285?ref_src=twsrc%5Etfw">February 11, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
         </div>
       </TabPanel>
     </div>
