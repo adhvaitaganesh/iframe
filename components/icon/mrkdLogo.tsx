@@ -5,7 +5,7 @@ interface Props {
   className?: string;
 }
 
-export const mrkdLogo = ({
+export const MrkdLogo = ({
   className,
   ...rest
 }: Props): React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> => {
