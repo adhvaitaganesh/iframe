@@ -199,7 +199,9 @@ export const Panel = ({
         </div>
       </TabPanel>
       <TabPanel value={TABS.SOCIAL} currentTab={currentTab}>
-        {Page()}
+        <div data-theme= "dark">
+          <Tweet id="1492205338153697285" />
+        </div> 
       </TabPanel>
     </div>
   );
