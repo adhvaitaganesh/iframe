@@ -8,7 +8,7 @@ import {
   MediaViewer,
   ExternalLink,
   DropdownMenu,
-  Disclaimer,
+  Disclaimer
 } from "@/components/ui";
 import {Page} from "@/components/ui/twitter";
 import { TbaOwnedNft } from "@/lib/types";
