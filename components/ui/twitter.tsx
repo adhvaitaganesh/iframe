@@ -38,9 +38,13 @@ const TweetPage = async ({ id }: { id: string }) => {
  
 export const Page = ({ params }: { params: { tweet: string } }) => {
  return (
-  <Suspense fallback={<TweetSkeleton />}>
-    <TweetPage id={params.tweet} />
-  </Suspense>
+  <>
+  <div>
+   <Suspense fallback={<TweetSkeleton />}>
+     <TweetPage id={params.tweet} />
+   </Suspense>
+  </div>
+  </>
 ) ;
 };
  
