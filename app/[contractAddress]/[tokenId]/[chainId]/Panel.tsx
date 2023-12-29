@@ -9,6 +9,7 @@ import {
   ExternalLink,
   DropdownMenu,
   Disclaimer,
+  Page
 } from "@/components/ui";
 import { TbaOwnedNft } from "@/lib/types";
 import useSWR from "swr";
@@ -19,9 +20,6 @@ import { getEtherscanLink, shortenAddress } from "@/lib/utils";
 import { chainIdToOpenseaAssetUrl } from "@/lib/constants";
 import { Tweet } from 'react-tweet' ;
  
-export default function Page() {
-  return <Tweet id="1492205338153697285" />
-}
 
 export const TABS = {
   COLLECTIBLES: "Collectibles",
@@ -200,7 +198,7 @@ export const Panel = ({
       </TabPanel>
       <TabPanel value={TABS.SOCIAL} currentTab={currentTab}>
         <div data-theme= "dark">
-          <Tweet id="1492205338153697285" />
+          {Page("1492205338153697285")}
         </div> 
       </TabPanel>
     </div>
