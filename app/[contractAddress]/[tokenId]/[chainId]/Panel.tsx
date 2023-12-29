@@ -197,9 +197,7 @@ export const Panel = ({
         </div>
       </TabPanel>
       <TabPanel value={TABS.SOCIAL} currentTab={currentTab}>
-        <div data-theme= "dark">
           {Page({"1492205338153697285"})}
-        </div> 
       </TabPanel>
     </div>
   );
