@@ -36,10 +36,12 @@ const TweetPage = async ({ id }: { id: string }) => {
   }
 }
  
-export const Page = ({ params }: { params: { tweet: string } }) => (
+export const Page = ({ params }: { params: { tweet: string } }) => {
+ return (
   <Suspense fallback={<TweetSkeleton />}>
     <TweetPage id={params.tweet} />
   </Suspense>
-)
+) ;
+};
  
-export default Page
+//export default Page
