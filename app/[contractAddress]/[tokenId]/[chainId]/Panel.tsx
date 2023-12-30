@@ -10,7 +10,7 @@ import {
   DropdownMenu,
   Disclaimer
 } from "@/components/ui";
-import {Page} from "@/components/ui/twitter";
+import Page from "@/components/ui/twitter";
 import { TbaOwnedNft } from "@/lib/types";
 import useSWR from "swr";
 import { getAlchemy } from "@/lib/clients";
