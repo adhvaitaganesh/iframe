@@ -198,7 +198,7 @@ export const Panel = ({
       </TabPanel>
       <TabPanel value={TABS.SOCIAL} currentTab={currentTab}>
         <>  
-          {Page({tweet : "1534682410012622848"})}
+          {Page({ {tweet} : "1534682410012622848"})}
         </>
       </TabPanel>
     </div>
