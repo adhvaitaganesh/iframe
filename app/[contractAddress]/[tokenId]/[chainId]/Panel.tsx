@@ -106,6 +106,7 @@ export const Panel = ({
   const etherscanLink = getEtherscanLink({ chainId, address: account });
 
   return (
+    <>
     <div
       className={clsx(
         className,
@@ -202,5 +203,6 @@ export const Panel = ({
         </div>
       </TabPanel>
     </div>
+    </>
   );
 };
