@@ -41,7 +41,7 @@ type LogoType = {
 };
 
 const Logo: LogoType = {
-  DEFAULT: MrkdLogo,
+  DEFAULT: GalverseLogo,
   GALVERSE: GalverseLogo,
 };
 
