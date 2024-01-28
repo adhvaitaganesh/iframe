@@ -25,6 +25,7 @@ export const TABS = {
   COLLECTIBLES: "Collectibles",
   ASSETS: "Assets",
   SOCIAL: "Socials",
+  LINKS: "Verified Links",
 };
 
 interface CopyAddressProps {
@@ -202,6 +203,14 @@ export const Panel = ({
           <Tweet id= "1534682410012622848"/>
         </div>
       </TabPanel>
+      <TabPanel value={TABS.LINKS} currentTab={currentTab}>
+        <div>  
+        <ExternalLink className="h-[20px] w-[20px]" link={etherscanLink} />
+        <ExternalLink className="h-[20px] w-[20px]" link= "https://www.kezi-ban.com/" />
+        <ExternalLink className="h-[20px] w-[20px]" link={etherscanLink} />
+        </div>
+      </TabPanel>
+
     </div>
     </>
   );
