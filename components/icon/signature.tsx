@@ -1,5 +1,6 @@
 export const signature = () => {
   return (
+    <div>
     <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 width="100%" viewBox="0 0 675 1200" enable-background="new 0 0 675 1200" xml:space="preserve">
 <path fill="#000000" opacity="1.000000" stroke="none" 
@@ -1197,6 +1198,7 @@ M396.866943,496.333099
 	C396.144073,495.955566 396.437988,495.991028 396.866943,496.333099 
 z"/>
 </svg>
+</div>
 
         );
     }
