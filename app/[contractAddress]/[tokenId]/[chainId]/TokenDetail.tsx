@@ -43,7 +43,7 @@ type LogoType = {
 };
 
 const Logo: LogoType = {
-  DEFAULT: signature,
+  DEFAULT: signature2,
   GALVERSE: GalverseLogo,
   MRKD : MrkdLogo,
   SIGN : signature,
