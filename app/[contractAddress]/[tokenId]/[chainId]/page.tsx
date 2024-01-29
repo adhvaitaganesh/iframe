@@ -6,6 +6,8 @@ import { isNil } from "lodash";
 import { TokenboundClient } from "@tokenbound/sdk";
 import { getAccountStatus } from "@/lib/utils";
 import { TbLogo } from "@/components/icon";
+import { MrkdLogo } from "@/components/icon/MrkdLogo";
+import { signature } from "@/components/icon/signature";
 import { useGetApprovals, useNft, useTBADetails } from "@/lib/hooks";
 import { TbaOwnedNft } from "@/lib/types";
 import { getAddress } from "viem";
@@ -135,7 +137,7 @@ export default function Token({ params, searchParams }: TokenParams) {
           <div className="max-h-1080[px] relative h-full w-full max-w-[1080px]">
             {showLoading ? (
               <div className="absolute left-[45%] top-[50%] z-10 h-20 w-20 -translate-x-[50%] -translate-y-[50%] animate-bounce">
-                <TbLogo />
+                <MrkdLogo />
               </div>
             ) : (
               <div

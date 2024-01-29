@@ -1,6 +1,7 @@
 import { Variants, motion } from "framer-motion";
 import { GalverseLogo, TokenboundLogo} from "@/components/icon";
-import {MrkdLogo} from "@/components/icon/MrkdLogo" ;
+import { MrkdLogo } from "@/components/icon/MrkdLogo";
+import { signature } from "@/components/icon/signature";
 import { Panel } from "./Panel";
 import { TbaOwnedNft } from "@/lib/types";
 
@@ -41,8 +42,10 @@ type LogoType = {
 };
 
 const Logo: LogoType = {
-  DEFAULT: GalverseLogo,
+  DEFAULT: signature,
   GALVERSE: GalverseLogo,
+  MRKD : MrkdLogo,
+  SIGN : signature,
 };
 
 export const TokenDetail = ({
