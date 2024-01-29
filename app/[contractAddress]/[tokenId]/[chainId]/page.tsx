@@ -57,6 +57,22 @@ export default function Token({ params, searchParams }: TokenParams) {
         });
       });
 
+      //fit img to container
+      const img = document.querySelector("img");
+      const imgWidth = img?.clientWidth;
+      const imgHeight = img?.clientHeight;
+      const imgRatio = imgWidth / imgHeight;
+      const container = document.querySelector(".max-h-1080[px]");
+      const containerWidth = container?.clientWidth;
+      const containerHeight = container?.clientHeight;
+      const containerRatio = containerWidth / containerHeight;
+      if (imgRatio > containerRatio) {
+        img?.classList.add("h-full");
+      } else {
+        img?.classList.add("w-full");
+      }
+
+
       Promise.all(imagePromises)
         .then(() => {
           setImagesLoaded(true);
