@@ -139,7 +139,7 @@ export default function Token({ params, searchParams }: TokenParams) {
           )}
           <div className="max-h-1080[px] relative h-full w-full max-w-[1080px]">
             {showLoading ? (
-              <div className="absolute left-[45%] top-[50%] z-10 h-20 w-20 -translate-x-[50%] -translate-y-[50%] animate-bounce">
+              <div className="absolute right-[45%] bottom-[50%] z-10 h-20 w-20 -translate-x-[50%] -translate-y-[50%] animate-bounce">
                 <MrkdLogo />
               </div>
             ) : (
