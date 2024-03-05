@@ -155,6 +155,7 @@ export default function Token({ params, searchParams }: TokenParams) {
                       className="col-span-1 col-start-1 row-span-1 row-start-1 translate-x-0"
                       src={image}
                       alt="Nft image"
+                      //stretch image to fit page
                       style={{ objectFit: 'cover' }}
                     />
                   ))

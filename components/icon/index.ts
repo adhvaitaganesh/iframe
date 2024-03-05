@@ -5,4 +5,5 @@ export * from "./Check";
 export * from "./GalverseLogo";
 export * from "./MrkdLogo";
 export * from "./signature";
+export * from "./signature2";
 
