@@ -34,7 +34,8 @@
     "react-tweet" : "^3.2.0",
     "@vercel/kv" : "latest",
     "vercel" : "latest",
-    "react-router-dom" : "latest"
+    "react-router-dom" : "latest",
+    "web3" : "latest"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.195",
