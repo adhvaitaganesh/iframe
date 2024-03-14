@@ -105,7 +105,7 @@ export const TokenDetail = ({
       >
 
       <ThirdwebProvider
-      activeChain="sepolia"
+      //activeChain="sepolia  "
       clientId="af117edac9ee7c4bbc0bfdc81dc3eeb8"
       //locale={en()}
       supportedWallets={[
