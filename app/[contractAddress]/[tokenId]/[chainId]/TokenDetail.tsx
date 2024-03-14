@@ -5,6 +5,18 @@ import { signature } from "@/components/icon/signature";
 import { signature2 } from "@/components/icon/signature2";
 import { Panel } from "./Panel";
 import { TbaOwnedNft } from "@/lib/types";
+//import { ThirdwebWallet } from "@/components/ui/ThirdwebProvider" ;
+//import { ConnectWallet } from "@thirdweb-dev/react";
+import {
+  ThirdwebProvider,
+  ConnectWallet,
+  metamaskWallet,
+  coinbaseWallet,
+  walletConnect,
+  localWallet,
+  embeddedWallet,
+} from "@thirdweb-dev/react";
+
 
 interface Props {
   className?: string;
@@ -18,6 +30,12 @@ interface Props {
   title: string;
   chainId: number;
   logo?: string;
+}
+
+export default function App() {
+  return (
+    ""
+  );
 }
 
 const variants = {
@@ -70,13 +88,56 @@ export const TokenDetail = ({
   return (
     <div className={className}>
       <motion.div
-        className="absolute left-4 top-4 z-10 rounded-full cursor-pointer"
+        className="absolute left-1 top-1 z-10 rounded-full cursor-pointer"
         whileHover="hover"
         variants={iconVariant}
         initial="unHovered"
       >
         <CustomLogo onClick={() => handleOpenClose(!isOpen)} />
+        
       </motion.div>
+
+      <motion.div
+        className="absolute right-4 top-4 z-10 rounded-full cursor-pointer"
+        whileHover="hover"
+        variants={iconVariant}
+        initial="unHovered"
+      >
+
+      <ThirdwebProvider
+      activeChain="ethereum"
+      clientId="af117edac9ee7c4bbc0bfdc81dc3eeb8"
+      //locale={en()}
+      supportedWallets={[
+        metamaskWallet(),
+        coinbaseWallet({ recommended: true }),
+        walletConnect(),
+        localWallet(),
+        embeddedWallet({
+          auth: {
+            options: [
+              "email",
+              "google",
+              "apple",
+              "facebook",
+            ],
+          },
+        }),
+      ]}
+      authConfig={{
+        authUrl: "/api/auth",
+        domain: "https://mrkd.art",
+      }}
+    >
+      <ConnectWallet
+        theme={"dark"}
+        switchToActiveChain={true}
+        auth={{ loginOptional: true }}
+        modalSize={"wide"}
+      />
+    </ThirdwebProvider>
+  </motion.div>
+
       {isOpen && (
         <motion.div
           className={`custom-scroll absolute bottom-0 z-10 w-full max-w-[1080px] overflow-y-auto`}

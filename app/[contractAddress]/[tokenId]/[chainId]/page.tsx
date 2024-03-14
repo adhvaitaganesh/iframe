@@ -33,7 +33,7 @@ export default function Token({ params, searchParams }: TokenParams) {
   const [showTokenDetail, setShowTokenDetail] = useState(false);
   const chainIdNumber = parseInt(chainId);
 
-  const tokenboundClient = new TokenboundClient({ chainId: chainIdNumber });
+  const tokenboundClient = new TokenboundClient({ chainId: 11155111 });
 
   const {
     data: nftImages,
@@ -152,11 +152,11 @@ export default function Token({ params, searchParams }: TokenParams) {
                   nftImages.map((image, i) => (
                     <img
                       key={i}
-                      className="col-span-1 col-start-1 row-span-1 row-start-1 translate-x-0"
+                      className="col-span-1 col-start-1 row-span-1 row-start-1 translate-x-0 fit-container"
                       src={image}
                       alt="Nft image"
                       //stretch image to fit page
-                      style={{ objectFit: 'cover' }}
+                      style={{ objectPosition: 'center', objectFit: 'cover', width: '100%', height: '100%'}}
                     />
                   ))
                 ) : (
