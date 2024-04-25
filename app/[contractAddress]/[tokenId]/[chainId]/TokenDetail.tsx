@@ -30,6 +30,7 @@ interface Props {
   title: string;
   chainId: number;
   logo?: string;
+  contractAddress: string;
 }
 
 export default function App() {
@@ -80,6 +81,7 @@ export const TokenDetail = ({
   title,
   chainId,
   logo,
+  contractAddress,
 }: Props) => {
   let currentAnimate = isOpen ? "open" : "closed";
 
@@ -97,7 +99,33 @@ export const TokenDetail = ({
         
       </motion.div>
 
-      <motion.div
+
+      {isOpen && (
+        <motion.div
+          className={`custom-scroll absolute bottom-0 z-10 w-full max-w-[1080px] overflow-y-auto`}
+          animate={currentAnimate}
+          variants={variants}
+          initial="closed"
+        >
+          <Panel
+            approvalTokensCount={approvalTokensCount}
+            account={account}
+            tokens={tokens}
+            title={title}
+            chainId={chainId}
+            accounts={accounts}
+            handleAccountChange={handleAccountChange}
+            contractAddress={contractAddress}
+          />
+        </motion.div>
+      )}
+    </div>
+  );
+};
+
+
+/*
+<motion.div
         className="absolute right-4 top-4 z-10 rounded-full cursor-pointer"
         whileHover="hover"
         variants={iconVariant}
@@ -105,7 +133,7 @@ export const TokenDetail = ({
       >
 
       <ThirdwebProvider
-      //activeChain="sepolia  "
+      activeChain="sepolia"
       clientId="af117edac9ee7c4bbc0bfdc81dc3eeb8"
       //locale={en()}
       supportedWallets={[
@@ -135,27 +163,6 @@ export const TokenDetail = ({
         auth={{ loginOptional: true }}
         modalSize={"wide"}
       />
-    </ThirdwebProvider>
+    </ThirdwebProvider> 
   </motion.div>
-
-      {isOpen && (
-        <motion.div
-          className={`custom-scroll absolute bottom-0 z-10 w-full max-w-[1080px] overflow-y-auto`}
-          animate={currentAnimate}
-          variants={variants}
-          initial="closed"
-        >
-          <Panel
-            approvalTokensCount={approvalTokensCount}
-            account={account}
-            tokens={tokens}
-            title={title}
-            chainId={chainId}
-            accounts={accounts}
-            handleAccountChange={handleAccountChange}
-          />
-        </motion.div>
-      )}
-    </div>
-  );
-};
+*/

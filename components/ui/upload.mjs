@@ -11,7 +11,7 @@ import fs from 'fs'
 import path from 'path'
 
 // Paste your NFT.Storage API key into the quotes:
-const NFT_STORAGE_KEY = 'REPLACE_ME_WITH_YOUR_KEY'
+const NFT_STORAGE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDM1OTFGOTNjZGE1RjY3NEQxOWVjNUE1MDhDNjQ5MTcyYjU5NWI4RjUiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY1NzczNjM3ODYyNCwibmFtZSI6InRlc3QxIn0.gXp0jb-b89bHpNPQUR3V_secV9b3iY_x0EAsn-JmcPM'
 
 /**
   * Reads an image file from `imagePath` and stores an NFT with the given name and description.

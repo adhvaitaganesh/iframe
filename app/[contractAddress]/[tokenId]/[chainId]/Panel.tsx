@@ -19,19 +19,42 @@ import { useGetTokenBalances } from "@/lib/hooks";
 import { getEtherscanLink, shortenAddress } from "@/lib/utils";
 import { chainIdToOpenseaAssetUrl } from "@/lib/constants";
 import { Tweet } from 'react-tweet' ;
+//import {myContract} from "@/components/ui/we3_interface"
+import Web3 from "web3";
+import { useAddress, ConnectWallet,ThirdwebProvider, useContract, useContractRead } from "@thirdweb-dev/react";
+import {addManager, addHLinkArtist, retreiveAssetLink} from "@/components/interface_sc/addManagers";
+import { add } from "lodash";
+import styles from "@/styles/Home.module.css";
+import {mrkdAbilite} from "@/lib/abi";
+import sdk from '@thirdweb-dev/sdk';
+//import { sepolia } from "thirdweb/chains";
+
+//call add hLinkArtist from we3_interface
+//myContract.methods.hLinkArtist().call().then(console.log);
+
+//call add hLinkOwner from we3_interface
+//myContract.methods.hLinkOwner().call().then(console.log);
+
+//read the wallet address from the the thirdweb provider
+
+//const address = useAddress();
  
 
 export const TABS = {
   COLLECTIBLES: "Collectibles",
   ASSETS: "Assets",
-  SOCIAL: "Socials",
-  LINKS: "Verified Links",
+  //SOCIAL: "Socials",
+  LINKS: "Provanance",
+  MANAGE: "Manage",
+  MANAGE2: "Manage2",
 };
 
 interface CopyAddressProps {
   account: string;
   displayedAddress: string;
 }
+
+//const address = useAddress();
 
 const CopyAddress = ({ account, displayedAddress }: CopyAddressProps) => {
   const [copied, setCopied] = useState(false);
@@ -80,9 +103,11 @@ interface Props {
   tokens: TbaOwnedNft[];
   title: string;
   chainId: number;
+  contractAddress: string;
 }
 
-export const Panel = ({
+
+export const Panel1 = ({
   className,
   approvalTokensCount,
   account,
@@ -91,11 +116,19 @@ export const Panel = ({
   tokens,
   title,
   chainId,
+  contractAddress,
 }: Props) => {
   const [copied, setCopied] = useState(false);
   const [currentTab, setCurrentTab] = useState(TABS.COLLECTIBLES);
 
   const displayedAddress = account;
+
+  const address = useAddress();
+
+  
+  //const contract = await sdk.getContract(contractAddress, mrkdAbilite);
+
+
 
   const { data: ethBalance } = useSWR(account ? account : null, async (accountAddress) => {
     const alchemy = getAlchemy(chainId);
@@ -140,7 +173,7 @@ export const Panel = ({
       {typeof account === "string" && accounts && account === accounts[1] && (
         <Disclaimer message="Migrate your assets to V3 account for latest features." />
       )}
-      <Tabs
+      <Tabs 
         tabs={Object.values(TABS)}
         currentTab={currentTab}
         onTabChange={(tab) => setCurrentTab(tab)}
@@ -198,20 +231,61 @@ export const Panel = ({
           ))}
         </div>
       </TabPanel>
-      <TabPanel value={TABS.SOCIAL} currentTab={currentTab}>
-        <div>  
-          <Tweet id= "1534682410012622848"/>
-        </div>
+
+      <TabPanel value={TABS.MANAGE} currentTab={currentTab}>
+        
+        <ConnectWallet />
+        address && (
+
+          <div className="container">
+            <div className="flexx-left">
+              <h1>Your Managers:</h1>
+              <div>{addHLinkArtist(contractAddress)}</div>
+            </div>
+          </div>
+
+
+        )
+
+
+
       </TabPanel>
-      <TabPanel value={TABS.LINKS} currentTab={currentTab}>
-        <div>  
-        <ExternalLink className="h-[20px] w-[20px]" link={etherscanLink} />
-        <ExternalLink className="h-[20px] w-[20px]" link= "https://www.kezi-ban.com/" />
-        <ExternalLink className="h-[20px] w-[20px]" link={etherscanLink} />
-        </div>
+
+      <TabPanel value={TABS.MANAGE2} currentTab={currentTab}>
+        
+        <ConnectWallet />
+        address && (
+
+          <div className="container">
+            <div className="flexx-left">
+              <h1>Your Managers:</h1>
+              <div>{addHLinkArtist(contractAddress)}</div>
+            </div>
+          </div>
+
+
+        )
+
+
+
       </TabPanel>
+
 
     </div>
     </>
   );
 };
+
+
+export const Panel = (props: Props) => {
+  return (
+    <ThirdwebProvider
+          clientId="af117edac9ee7c4bbc0bfdc81dc3eeb8"
+          activeChain="sepolia"
+        >
+      <Panel1 {...props}/>
+
+    </ThirdwebProvider>
+  );
+};
+

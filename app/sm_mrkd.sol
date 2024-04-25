@@ -1,0 +1,282 @@
+// SPDX-License-Identifier: CC0-1.0
+pragma solidity ^0.8.20;
+
+import "contracts/hyperconstruct.sol" ;
+
+import "@openzeppelin/contracts@5.0.1/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts@5.0.1/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts@5.0.1/token/ERC721/extensions/ERC721Pausable.sol";
+import "@openzeppelin/contracts@5.0.1/access/Ownable.sol";
+import "@openzeppelin/contracts@5.0.1/token/ERC721/extensions/ERC721Burnable.sol";
+import "hardhat/console.sol";  
+
+
+contract MyToken is ERC721, ERC721URIStorage, ERC721Pausable, Ownable, ERC721Burnable, IERC5489 {
+    
+    struct hLinkStructure{
+        string name;
+        string typeOf; //typeOf the URI. Examples: asset, physical conterpart, story, article, social-links etc. basically anything which is related to the art
+        string description; //describe briefly
+        string link;
+
+    }
+
+    //let's define basic struture of our hyperlink hash values
+    /*
+    mapped from tokenId -> const address owner-> ;
+        struct hlink:
+        {
+            name: "string"
+            type: "string"
+            description: "string"
+            hLink: "string URI" 
+        }
+
+        retrieval function(tokenID) :
+            m
+
+
+            
+
+        
+    */
+    //careful here
+    //creator address is stored once and cannot be changed
+    address immutable creatorAddress;
+    /*function creator(address ca) internal {
+        creatorAddress = ca ;
+    }
+    */
+    uint256 private _nextTokenId;
+    mapping( uint256 => [string, address]) internal slotAuth ; // use internal private for more closed system
+    //hash table for verified links. Must satisfy general structure of a decentral hash function
+    mapping(uint256 => mapping(address => hLinkStructure )) internal hLinkArtist;
+    mapping(uint256 => mapping(address => hLinkStructure )) internal hLinkOwners;
+
+    function compareStrings(string memory a, string memory b) public view returns (bool) {
+    return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))));
+    }
+
+    constructor(address initialOwner)
+        ERC721("MyHNFT", "MT")
+        Ownable(initialOwner)   //cannot implement in erc 404. 
+        /* For this ERC to be inherited by ERC404, this must implement "Ownable" seperately. */ 
+        //creatorAddress(tx.origin) 
+        //The function should run inside the constructor
+        //probalby looking at ERCs will give the answer
+
+    {
+        creatorAddress = msg.sender ;
+    }
+
+    function pause() public onlyOwner {
+        _pause();
+    }
+
+    function unpause() public onlyOwner {
+        _unpause();
+    }
+    //The function safeMint will intialize the slotManager = Minter =tx.origin 
+    function safeMint(address to, string memory uri) public {
+        uint256 tokenId = _nextTokenId++;
+        _safeMint(to, tokenId);
+        _setTokenURI(tokenId, uri);
+        authorizeSlotTo(tokenId, tx.origin) ; //Creator/artist/minter gets default access to slot
+    }
+
+
+
+    /**testing function
+    This generates a special interface for #owner to set token URI explicitly.
+    The operations performed will be hidden for rest. **/
+    
+    /*
+    function setURI(uint256 tokenID, string memory uri) internal onlyOwner {
+        _setTokenURI(tokenID, uri);
+    }
+    */
+
+    function authorizeSlotTo(uint256 tokenId, string calldata name, address slotManagerAddr) public onlyOwner override{
+        slotAuth[tokenId] = [name, slotManagerAddr];
+        emit SlotAuthorizationCreated(tokenId, slotManagerAddr);
+    }
+
+    function revokeAuthorization(uint256 tokenId, address slotManagerAddr) public onlyOwner {
+        if ( slotAuth[tokenId] == slotManagerAddr) {
+            delete slotAuth[tokenId];
+            emit SlotAuthorizationRevoked(tokenId, slotManagerAddr) ;
+        }
+        else {
+            console.log("error, enter right pairs") ;
+        }
+    }
+
+    function revokeAllAuthorizations(uint256 tokenId) public override {
+        console.log("not implemented") ;
+    }
+
+    function setSlotUri(
+        uint256 tokenId,
+        string calldata newUri
+    ) public override {
+        if(msg.sender == slotAuth[tokenId]) {
+            _setTokenURI(tokenId, newUri) ;
+            emit SlotUriUpdated(tokenId, msg.sender, newUri) ;
+        }
+        else console.log("unauthorised");
+    }
+
+    function getSlotUri(uint256 tokenId, address slotManagerAddr)
+        public
+        view
+        override 
+        returns (string memory){
+            return tokenURI(tokenId);
+        }
+    
+    function viewAuthorizedSlot(uint256 tokenId)public view{
+        //non restricted retreival
+        console.log(slotAuth[tokenId]) ;
+
+    }
+
+
+
+    // The following functions are overrides required by Solidity.
+
+    function _update(address to, uint256 tokenId, address auth)
+        internal
+        override(ERC721, ERC721Pausable)
+        returns (address)
+    {
+        return super._update(to, tokenId, auth);
+    }
+
+    function tokenURI(uint256 tokenId)
+        public
+        view
+        override(ERC721, ERC721URIStorage)
+        returns (string memory)
+    {
+        return super.tokenURI(tokenId);
+    }
+
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(ERC721, ERC721URIStorage)
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
+    }
+
+    function _devide721 () external {
+        //the function devides the existing 721s into erc 20s. the fractional number is in the input.
+        //once the number is fixed it cannot be reverted
+        //the owner of set of fractional nfts erc 20s can join them if owned_nuber >= scattered_number
+
+    }
+
+    function mint_721(address _minter) external
+    {
+        //this function mints the fractional ERCs into 1 721 nft.
+        //In the process all the erc20 will be burned ammounting up to One-721, which was initially stated.
+        //the combined NFT will be minted to the given address
+    }
+
+    //insertLinks performs insertion operation on the hash table
+    //do not expose the function to public.
+    function insertLink(hLinkStructure calldata uri, address slotManagerAddr, uint256 tokenID) internal {
+        //console.log("did nothing") ;
+
+        hLinkArtist[tokenID][slotManagerAddr] = uri;
+
+        /*
+        
+        */
+    }
+
+    //delete link must be implemented with fast runtime
+    function deleteLink(hLinkStructure calldata uri, address slotManagerAddr, uint256 tokenID) internal {
+        console.log("did nothing") ;
+        delete hLinkArtist[tokenID][slotManagerAddr] ;
+        hLinkArtist[tokenID][slotManagerAddr] = uri ;
+
+        //This does not feel right. LOOK INTO IT!!!
+
+    }
+
+    //Implement hyperlink seperately
+    //store hlinks on the chain itself
+    function addHyperLinkArtist(hLinkStructure calldata hURI, uint256 tokenID, bool update, hLinkStructure calldata newURI) public {
+        //check if slotManager is already present in the hash table
+        
+        //if slotManager or he is the artist perform ops
+        if(slotAuth[tokenID] == msg.sender || creatorAddress == msg.sender  ) {
+            //if update == false call add function
+            if(!update) {
+                insertLink(hURI, msg.sender, tokenID) ;
+            }
+
+
+            //else call delete + add 
+            else {
+                deleteLink(hURI, msg.sender, tokenID) ;
+                insertLink (newURI, msg.sender, tokenID) ;
+            }
+
+        }
+    }
+
+    function addHyperLinkOwner(hLinkStructure calldata hURI, uint256 tokenID, bool update, hLinkStructure calldata newURI) public {
+        //check if slotManager is already present in the hash table
+        
+        //if slotManager or he is the artist perform ops
+        if(slotAuth[tokenID] == msg.sender || ownerOf(tokenID) == msg.sender  ) {
+            //if update == false call add function
+            if(!update) {
+                insertLink(hURI, msg.sender, tokenID) ;
+            }
+
+
+            //else call delete + add 
+            else {
+                deleteLink(hURI, msg.sender, tokenID) ;
+                insertLink (newURI, msg.sender, tokenID) ;
+            }
+
+        }
+    }
+
+    //Retrieve HLinks from the dtrorage
+    //Must return all in general. Yet special cases are to be considered. Therefore "only" specific Links must also be retrieved
+    function retreiveAssetLink(uint256 tokenID) public view returns(hLinkStructure memory){
+        hLinkStructure memory links ;
+        links = hLinkArtist[tokenID][msg.sender] ;
+        return links ;
+
+    }
+
+    function retreiveprovananceLink(uint256 tokenID) public view returns(hLinkStructure memory){
+        hLinkStructure memory links ;
+        links = hLinkOwners[tokenID][msg.sender] ;
+        return links ;
+
+    }
+
+    function retrieveSpecific(uint256 tokenID, string memory _name) public view returns(string memory) {
+        //string memory links;
+        //string memory linkName;
+        //linkName = hLinkOwners[tokenID][msg.sender].name ;
+        if( compareStrings(hLinkOwners[tokenID][msg.sender].name, _name )) {
+            return hLinkOwners[tokenID][msg.sender].name ;
+        }
+        else return "";
+
+
+
+    }
+
+}
+
+
