@@ -1,0 +1,64 @@
+.BC {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    background-color: #f7f8fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.signinBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+}
+
+.signinBtn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.google {
+    background-color: #db4437;
+    color: #ffffff;
+}
+
+.email {
+    background-color: #4285f4;
+    color: #ffffff;
+}
+
+.facebook {
+    background-color: #3b5998;
+    color: #ffffff;
+}
+
+.twitter {
+    background-color: #1da1f2;
+    color: #ffffff;
+}
+
+.signinBtn:hover {
+    opacity: 0.8;
+}

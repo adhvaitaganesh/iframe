@@ -81,7 +81,7 @@ contract MyToken is ERC721, ERC721URIStorage, ERC721Pausable, Ownable, ERC721Bur
         uint256 tokenId = _nextTokenId++;
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
-        authorizeSlotTo(tokenId, tx.origin) ; //Creator/artist/minter gets default access to slot
+        authorizeSlotTo(tokenId, "creator", tx.origin) ; //Creator/artist/minter gets default access to slot
     }
 
 

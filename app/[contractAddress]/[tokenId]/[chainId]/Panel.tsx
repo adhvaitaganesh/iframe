@@ -22,11 +22,18 @@ import { Tweet } from 'react-tweet' ;
 //import {myContract} from "@/components/ui/we3_interface"
 import Web3 from "web3";
 import { useAddress, ConnectWallet,ThirdwebProvider, useContract, useContractRead } from "@thirdweb-dev/react";
-import {addManager, addHLinkArtist, retreiveAssetLink} from "@/components/interface_sc/addManagers";
+import { useActiveAccount, ConnectButton, ThirdwebProvider as ThirdwebV5 } from "thirdweb/react";
+import {addManager, retreiveAssetLink, Retrieve, Managers, addProvanance} from "@/components/interface_sc/addManagers";
 import { add } from "lodash";
 import styles from "@/styles/Home.module.css";
 import {mrkdAbilite} from "@/lib/abi";
 import sdk from '@thirdweb-dev/sdk';
+import Example, { Embed } from "@/components/ui/connectButton";
+import {createWallet, inAppWallet} from 'thirdweb/wallets'
+import { createThirdwebClient } from "thirdweb";
+import Links from "@/components/interface_sc/retrieveLink";
+import SignIn from "@/components/test-jaime/testhtml";
+
 //import { sepolia } from "thirdweb/chains";
 
 //call add hLinkArtist from we3_interface
@@ -43,10 +50,10 @@ import sdk from '@thirdweb-dev/sdk';
 export const TABS = {
   COLLECTIBLES: "Collectibles",
   ASSETS: "Assets",
-  //SOCIAL: "Socials",
-  LINKS: "Provanance",
+  TEST : "Test Tab",
+  LINKS: "Provenance",
   MANAGE: "Manage",
-  MANAGE2: "Manage2",
+  //MANAGE2: "Manage2",
 };
 
 interface CopyAddressProps {
@@ -123,7 +130,7 @@ export const Panel1 = ({
 
   const displayedAddress = account;
 
-  const address = useAddress();
+  const address = useActiveAccount();
 
   
   //const contract = await sdk.getContract(contractAddress, mrkdAbilite);
@@ -138,6 +145,13 @@ export const Panel1 = ({
 
   const { data: tokenBalanceData } = useGetTokenBalances(account as `0x${string}`, chainId);
   const etherscanLink = getEtherscanLink({ chainId, address: account });
+  const wallets = [
+    inAppWallet(),
+    createWallet("io.metamask"),
+    createWallet("com.coinbase.wallet"),
+    createWallet("me.rainbow"),
+  ];
+  const client = createThirdwebClient({ clientId : "af117edac9ee7c4bbc0bfdc81dc3eeb8" });
 
   return (
     <>
@@ -232,43 +246,42 @@ export const Panel1 = ({
         </div>
       </TabPanel>
 
+      <TabPanel value={TABS.LINKS} currentTab={currentTab}>
+      <ConnectButton client={client} wallets={wallets} />
+
+        <div className="container">
+          <div className="flexx-left">
+            <h1>Artist Provanance:</h1>
+            <div>{addProvanance(contractAddress)}</div>
+          </div>
+        </div>
+
+      <Links tokenId= {"1"} contractAdd = {contractAddress} /> 
+      
+      </TabPanel>
+
       <TabPanel value={TABS.MANAGE} currentTab={currentTab}>
         
-        <ConnectWallet />
-        address && (
+      <ConnectButton client={client} wallets={wallets} />
 
-          <div className="container">
-            <div className="flexx-left">
-              <h1>Your Managers:</h1>
-              <div>{addHLinkArtist(contractAddress)}</div>
-            </div>
-          </div>
+          
+      <div className="container">
+        <div className="flexx-left">
+          <h1>Your Managers:</h1>
+          <div>{addManager(contractAddress)}</div>
+        </div>
+      </div>
 
-
-        )
-
-
+      <Managers tokenId={'1'} contractAdd={contractAddress}/>
 
       </TabPanel>
 
-      <TabPanel value={TABS.MANAGE2} currentTab={currentTab}>
-        
-        <ConnectWallet />
-        address && (
-
-          <div className="container">
-            <div className="flexx-left">
-              <h1>Your Managers:</h1>
-              <div>{addHLinkArtist(contractAddress)}</div>
-            </div>
-          </div>
-
-
-        )
-
-
-
+      <TabPanel value={TABS.TEST} currentTab={currentTab}>
+        <SignIn>
+        </SignIn> 
       </TabPanel>
+
+
 
 
     </div>
@@ -283,7 +296,9 @@ export const Panel = (props: Props) => {
           clientId="af117edac9ee7c4bbc0bfdc81dc3eeb8"
           activeChain="sepolia"
         >
+          <ThirdwebV5>
       <Panel1 {...props}/>
+          </ThirdwebV5>
 
     </ThirdwebProvider>
   );

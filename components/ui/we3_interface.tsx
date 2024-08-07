@@ -1,16 +1,11 @@
-//basic template for we3 interface using web3.js
-//import Web3 from "web3";
-
-//This page should act as the interface to execute functions on the smart contract
-//We will use web3.js to interact with the smart contract
-//We will use the ABI and the contract address to interact with the smart contract
-//We will use the contract address to get the contract instance
 //const Web3 = require('web3');
-//const web3 = new Web3('http://localhost:8545');
+import Web3 from 'web3';
 
-//ABI of the smart contract
+const web3 = new Web3(new Web3.providers.HttpProvider("https://eth-sepolia.g.alchemy.com/v2/-F0QglXyzkk-QsaBi4Vb03oxFpQb1H29"));
 
-export const ABI = [
+
+
+const mrkdABI = [
 	{
 		"inputs": [],
 		"name": "_devide721",
@@ -186,6 +181,11 @@ export const ABI = [
 				"internalType": "uint256",
 				"name": "tokenId",
 				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
 			},
 			{
 				"internalType": "address",
@@ -959,27 +959,39 @@ export const ABI = [
 			{
 				"components": [
 					{
-						"internalType": "string",
-						"name": "name",
-						"type": "string"
+						"internalType": "address[]",
+						"name": "artOwner",
+						"type": "address[]"
 					},
 					{
-						"internalType": "string",
-						"name": "typeOf",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "description",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "link",
-						"type": "string"
+						"components": [
+							{
+								"internalType": "string",
+								"name": "name",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "typeOf",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "description",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "link",
+								"type": "string"
+							}
+						],
+						"internalType": "struct MyToken.hLinkStructure[]",
+						"name": "artProvanance",
+						"type": "tuple[]"
 					}
 				],
-				"internalType": "struct MyToken.hLinkStructure",
+				"internalType": "struct MyToken.Links",
 				"name": "",
 				"type": "tuple"
 			}
@@ -1020,33 +1032,9 @@ export const ABI = [
 						"type": "string"
 					}
 				],
-				"internalType": "struct MyToken.hLinkStructure",
+				"internalType": "struct MyToken.hLinkStructure[]",
 				"name": "",
-				"type": "tuple"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "tokenID",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "_name",
-				"type": "string"
-			}
-		],
-		"name": "retrieveSpecific",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
+				"type": "tuple[]"
 			}
 		],
 		"stateMutability": "view",
@@ -1112,18 +1100,33 @@ export const ABI = [
 			}
 		],
 		"name": "viewAuthorizedSlot",
-		"outputs": [],
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "slotManager",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					}
+				],
+				"internalType": "struct MyToken.managers",
+				"name": "",
+				"type": "tuple"
+			}
+		],
 		"stateMutability": "view",
 		"type": "function"
 	}
-]
-
-//Address of the smart contract
-const contractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
-
-//Create a contract instance
-//export const myContract = new web3.eth.Contract(ABI, contractAddress);
+];
 
 
+export default function getWeb3(contractAddress: string) {
+	return new web3.eth.Contract(mrkdABI, contractAddress);
+} 
 
 

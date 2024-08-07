@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from '@/styles/Home.module.css';
 import { Web3Button, useContract, useContractRead, useContractWrite } from '@thirdweb-dev/react';
-import { TransactionButton } from 'thirdweb/react';
+import { TransactionButton, useReadContract } from 'thirdweb/react';
 import { CONTRACT_ADDRESS } from '@/lib/constants/hnft';
 import { link } from 'fs';
 import { mrkdAbi, mrkdAbilite } from '@/lib/abi';
 import Web3 from 'web3';
+import contractInstance from '../ui/ThirdwebProvider';
+import getWeb3 from '../ui/we3_interface';
 // Remove the duplicate import statement
 // import {addHLinkArt}  from './thirdwebetc';
 //import { ThirdwebSDK } from "@thirdweb-dev/sdk";
@@ -16,7 +18,7 @@ import Web3 from 'web3';
 
 });*/
 
-import { prepareContractCall } from "thirdweb";
+import { prepareContractCall, sendAndConfirmTransaction } from "thirdweb";
 import { getContract } from 'thirdweb';
 //import { addHLinkArt } from './thirdwebetc';
 
@@ -25,7 +27,7 @@ import { getContract } from 'thirdweb';
 
 
 export function addManager(contractAdd: string ) {
-    const [addManagers, setAddManagers] = useState(false);
+    const [addManagers, setAddManagers] = useState(true);
     const [managers, setManagers] = useState("");
     const [tokenID, setTokenID] = useState("");
     const [name, setName] = useState("");
@@ -33,27 +35,27 @@ export function addManager(contractAdd: string ) {
     function resetForm() {
         //setAddManagers(false);
         setManagers("");
-        setTokenID("");
+        setTokenID("0");
         setName("");
     }
 
-    const contract = getContract()
+    const contract = contractInstance(contractAdd) ;
 
     
     return (
         <div>
             {addManagers ? (
                 <button
-                    className= {styles.addContactTriggerbutton}
-                    onClick={() => setAddManagers(true)}
+                    className= {styles.buttonClass}
+                    onClick={() => setAddManagers(false)}
                 >Add managers</button>
 
             ):(
-                <div className={styles.assContactContainer}>
+                <div className={styles.addContactContainer}>
                     <div className= {styles.addContactCard}>
                         <button
                             className={styles.closeButton}
-                            onClick={() => setAddManagers(false)}
+                            onClick={() => setAddManagers(true)}
                         >Close</button>
                         <div className={styles.addContactForm}>
                             <h3>Add Managers:</h3>
@@ -80,8 +82,29 @@ export function addManager(contractAdd: string ) {
                         <TransactionButton
                             transaction={() => {
                                 //prepare contract call
-
+                                const tx = prepareContractCall({
+                                    contract,
+                                    method: "authorizeSlotTo",
+                                    params: [BigInt(tokenID), name, managers],
+                                })
+                                return tx;
                             }}
+
+                            onClick={() => console.log('clicked')}
+
+                            onTransactionSent={(result) =>
+                                console.log("Transaction submitted", result.transactionHash)
+                            }
+                            onTransactionConfirmed={(receipt) =>
+                                {console.log("Transaction confirmed", receipt.transactionHash);
+                                resetForm();
+                                setAddManagers(false);
+                                alert(receipt.transactionHash);}
+                            }
+                            onError={(error) =>
+                                console.error("Transaction error", error)
+                            }
+
 
 
 
@@ -98,7 +121,7 @@ export function addManager(contractAdd: string ) {
         </div>
     );
     }
-    export function retreiveAssetLink(data: any) {
+    export function retreiveAssetLink(contractAdd: string) {
 
         const [retrieved, setretrieved] = useState(false);
         const [tokenId, settokenId] = useState("") ;
@@ -106,6 +129,16 @@ export function addManager(contractAdd: string ) {
         function resetForm() {
             settokenId("")
         }
+
+        const contract = contractInstance(contractAdd) ;
+
+        const MyComponent = (tokenId: string) => {
+            const { data, isLoading } = useReadContract({
+              contract,
+              method: "retreiveprovananceLink",
+              params: [BigInt(tokenId)],
+            });
+          };
 
 
         return(
@@ -132,22 +165,20 @@ export function addManager(contractAdd: string ) {
                                 onChange={(e) => settokenId(e.target.value)}
                             />
                         </div>
-                        <Web3Button
-                            contractAddress= {CONTRACT_ADDRESS}
-                             
-                            action = { () => data( {args: [tokenId]})}
-                            
-                            onSubmit={() => console.log("Transaction submitted")}
-                            onSuccess={() => {
-                                resetForm();
-                                alert("hLinkArtist added successfully");
-                                setretrieved(false);
 
+                        <button
+                            onClick={() => {
+                                const {data, isLoading} = useReadContract({
+                                    contract,
+                                    method: "retreiveprovananceLink",
+                                    params: [BigInt(tokenId)]
+                                });
+                                { data? alert(data) : alert(data)}
                             }}
-                            onError={(error) => alert("Something went wrong!")}
+                        >
+                            retieve provanancce    
+                        </button>    
 
-                        >Add hLinkArtist</Web3Button>
-                    
                     
                     </div>
                 </div>
@@ -157,6 +188,169 @@ export function addManager(contractAdd: string ) {
 
     );}
 
+
+    type RetrieveProps = {
+        tokenId: string;
+        contractAdd: string;
+      };
+
+    
+    
+        type ArtProvananceType = [string, string, string, string];
+
+        type DataType = {
+        [key: string]: [
+            string[], // array of addresses
+            ArtProvananceType[] // array of ArtProvananceType tuples
+        ];
+        };
+      
+
+
+    export const Retrieve = ({tokenId, contractAdd} : RetrieveProps) => {
+
+        /*const contract = contractInstance(contractAdd)
+
+        const { data, isLoading } = useReadContract({
+            contract,
+            method: "retreiveAssetLink",
+            params: [BigInt(tokenId)],
+        });
+        */
+
+        const contract = getWeb3(contractAdd);
+
+        /*const d = async () => {
+            const data = await contract.methods.retreiveAssetLink(tokenId).call();
+            return data;
+        }
+
+        const data = d();
+
+        
+
+        //create a button when clicked shoud execute the below statements
+        const [isButtonClicked, setIsButtonClicked] = useState(false);
+
+        const handleClick = () => {
+            setIsButtonClicked(true);
+            //alert(isLoading);
+            alert(data);
+        };
+
+        return (
+            <div className='text3xl'>
+            <button className= {styles.buttonClass} onClick={handleClick}>Display Data</button>
+            {isButtonClicked && data && Array.isArray(data) && data.map((item, index) => (
+                <div key={index} className={styles.dataClass}>
+                 {JSON.stringify(item)}
+                </div>
+            ))}
+            {isButtonClicked && data (
+                <div className={styles.dataClass}>
+                 {JSON.stringify(data.artProvanance)}
+                </div>
+            )} 
+            </div>
+        ); */
+        /*
+        <p>Name: {item.artProvanance.name}</p>
+                <p>Type: {item.artProvanance.typeOf}</p>
+                <p>Description: {item.artProvanance.description}</p>
+                <p>Link: {item.artProvanance.link}</p>*/ 
+        
+        
+        
+        
+        /*async() => {
+
+        return (
+            <div className='text3xl'>
+              {Array.isArray(data) && data.map((item, index) => (
+                <div key={index}>
+                  <p>Name: {item.name}</p>
+                  <p>Type: {item.typeOf}</p>
+                  <p>Description: {item.description}</p>
+                  <p>Link: {item.link}</p>
+                </div>
+              ))}
+            </div>
+          );
+
+        };
+        */
+
+
+        const [data, setData] = useState<DataType[]>([]);
+        const [isButtonClicked, setIsButtonClicked] = useState(false);
+      
+        useEffect(() => {
+          async function fetchData() {
+            const result = await contract.methods.retreiveAssetLink(BigInt(tokenId)).call();
+            if (Array.isArray(result)) {
+                setData(result as DataType[]);
+              } else {
+                setData([]);
+              }
+          }
+      
+          fetchData();
+        }, [tokenId]);
+      
+        const handleClick = () => {
+          setIsButtonClicked(true);
+          alert(data);
+        };
+      
+        return (
+            <div className='text3xl'>
+            <button className={styles.buttonClass} onClick={handleClick}>Display Data</button>
+            {isButtonClicked && data && data.map((item, index) => (
+              <div key={index} className={styles.dataClass}>
+                <div>{item.name}</div>
+                <div>{JSON.stringify(item.artProvanance)}</div>
+              </div>
+            ))}
+          </div>
+        );
+
+    };
+
+    
+
+
+    export const Managers = ({tokenId, contractAdd} : RetrieveProps) => {
+
+        const contract = contractInstance(contractAdd)
+
+        const { data, isLoading } = useReadContract({
+            contract,
+            method: "viewAuthorizedSlot",
+            params: [BigInt(tokenId)],
+        });
+
+        //create a button when clicked shoud execute the below statements
+        const [isButtonClicked, setIsButtonClicked] = useState(false);
+
+        const handleClick = () => {
+            setIsButtonClicked(true);
+            //alert(isLoading);
+            //alert(data);
+        };
+
+        return (
+            <div className='text3xl'>
+            <button className= {styles.buttonClass} onClick={handleClick}>Display Data</button>
+            {isButtonClicked && 
+                <div className={styles.dataClass}>
+                {data?.name} : {data?.slotManager}
+                </div>
+            }
+            </div>
+        );
+
+    };
+
         
     
 
@@ -164,13 +358,15 @@ export function addManager(contractAdd: string ) {
 
 
 
-export function addHLinkArtist(contractAdd: string) {
-    const [addHLink, setAddHLink] = useState(false);
+export function addProvanance(contractAdd: string) {
+    const [addHLink, setAddHLink] = useState(true);
     const [tokenID, setTokenID] = useState("");
     const [_name, set_Name] = useState("");
     const [typeOf, setTypeOf] = useState("");
     const [description, setDescription] = useState("");
     const [uri, setUri] = useState("");
+
+    const contract = contractInstance(contractAdd) ;
 
 
     //
@@ -190,19 +386,19 @@ export function addHLinkArtist(contractAdd: string) {
         <div>
             {addHLink ? (
                 <button
-                    className= {styles.addContactTriggerbutton}
-                    onClick={() => setAddHLink(true)}
-                >Add hLinkArtist</button>
+                    className= {styles.buttonClass}
+                    onClick={() => setAddHLink(false)}
+                >Add Your Provanance</button>
 
             ):(
-                <div className={styles.assContactContainer}>
+                <div className={styles.addContactContainer}>
                     <div className= {styles.addContactCard}>
                         <button
                             className={styles.closeButton}
-                            onClick={() => setAddHLink(false)}
+                            onClick={() => setAddHLink(true)}
                         >Close</button>
                         <div className={styles.addContactForm}>
-                            <h3>Add hLinkArtist:</h3>
+                            <h3>Add Provanance:</h3>
                             <input
                                 type="text"
                                 placeholder="Token ID"
@@ -237,22 +433,54 @@ export function addHLinkArtist(contractAdd: string) {
                         </div>
 
 
-                        <Web3Button
-                            contractAddress= {contractAdd}
-                            contractAbi={mrkdAbi}
-                             
-                            action = { async () => {await addHLinkArt()}}
-                            
-                            onSubmit={() => console.log("Transaction submitted")}
-                            onSuccess={() => {
-                                resetForm();
-                                alert("hLinkArtist added successfully");
-                                setAddHLink(false);
-
+                        <TransactionButton
+                            transaction={() => {
+                                //prepare contract call
+                                const tx = prepareContractCall({
+                                    contract,
+                                    method: "addHyperLinkOwner",
+                                    params: [
+                                        {
+                                          name: _name,
+                                          typeOf: typeOf,
+                                          description: description,
+                                          link: uri
+                                        },
+                                        BigInt(tokenID),
+                                        false,
+                                        {
+                                          name: _name,
+                                          typeOf: typeOf,
+                                          description: description,
+                                          link: uri
+                                        }
+                                      ],
+                                })
+                                return tx;
                             }}
-                            onError={(error) => alert(error)}
 
-                        >Add hLinkArtist</Web3Button>
+                            onClick={() => console.log('clicked')}
+
+                            onTransactionSent={(result) =>
+                                console.log("Transaction submitted", result.transactionHash)
+                            }
+                            onTransactionConfirmed={(receipt) =>
+                                {console.log("Transaction confirmed", receipt.transactionHash);
+                                resetForm();
+                                setAddHLink(false);
+                                alert(receipt.transactionHash);}
+                            }
+                            onError={(error) =>
+                                console.error("Transaction error", error)
+                            }
+
+
+
+
+
+                        >
+                            Add Provenance
+                        </TransactionButton>
                     
                     
                     </div>

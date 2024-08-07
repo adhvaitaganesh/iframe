@@ -16,6 +16,9 @@ import {
   localWallet,
   embeddedWallet,
 } from "@thirdweb-dev/react";
+import { artino } from "@/components/icon/artino";
+import {jm} from "@/components/icon/jm";
+import { vg } from "@/components/icon/vg";
 
 
 interface Props {
@@ -67,6 +70,9 @@ const Logo: LogoType = {
   MRKD : MrkdLogo,
   SIGN : signature,
   S2 : signature2,
+  ARTINO : artino,
+  JM : jm,
+  VG: vg,
 };
 
 export const TokenDetail = ({

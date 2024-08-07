@@ -1,6 +1,7 @@
 import useSWR from "swr";
 import { getAlchemy } from "@/lib/clients";
 
+
 export function useGetTokenBalances(account: `0x${string}`, chainId: number) {
   return useSWR(account ? `getTokenBalance-${account}` : null, async (accountRaw) => {
     // Get token balances
